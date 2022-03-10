@@ -66,37 +66,65 @@ func ConnectDB() {
 	}
 }
 
-// **************************************************
+func AqlToString(query string) string {
 
-func PrintCollection(db driver.Database, name string) {
+	var result string
 
-	var err error
-	var cursor driver.Cursor
-
-	querystring := "FOR doc IN users LIMIT 10 RETURN doc"
-
-	cursor, err = db.Query(nil, querystring, nil)
-
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
 	if err != nil {
-		log.Fatalf("Query failed: %v", err)
+		fmt.Println(err, " query error")
 	}
-
-	defer cursor.Close()
-
+	defer func(cursor driver.Cursor) {
+		err = cursor.Close()
+		if err != nil {
+			fmt.Println(err, " query error")
+		}
+	}(cursor)
 	for {
-		var doc models.User
-		var metadata driver.DocumentMeta
-
-		metadata, err = cursor.ReadDocument(nil, &doc)
-
+		_, err := cursor.ReadDocument(ctx, &result)
 		if driver.IsNoMoreDocuments(err) {
 			break
 		} else if err != nil {
-			log.Fatalf("Doc returned: %v", err)
-		} else {
-			fmt.Print("Dot doc ", metadata, doc, "\n")
+			fmt.Println(err, " query error")
 		}
 	}
+
+	return result
+}
+
+func AqlJSON(query string) models.User {
+
+	var dataPayload []models.User
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.User
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload[0]
+	}
+
+	return models.User{}
+
 }
 
 func PushUser(users *models.User) {
