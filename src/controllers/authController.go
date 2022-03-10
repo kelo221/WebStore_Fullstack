@@ -4,8 +4,10 @@ import (
 	"ambassor/src/database"
 	"ambassor/src/models"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -51,8 +53,6 @@ func Login(c *fiber.Ctx) error {
 	println("query: ", dbQuery)
 	user := database.AqlJSON(dbQuery)
 
-	println("returned from db: ", user.Email)
-
 	if user.Email == "" {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
@@ -68,5 +68,41 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(user)
+	payload := jwt.StandardClaims{
+		Audience:  "",
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		Id:        "",
+		IssuedAt:  0,
+		Issuer:    "",
+		NotBefore: 0,
+		Subject:   user.Id,
+	}
+
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte("test"))
+
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid Credentials.",
+		})
+	}
+
+	cookie := fiber.Cookie{
+		Name:        "JWT",
+		Value:       token,
+		Path:        "",
+		Domain:      "",
+		MaxAge:      0,
+		Expires:     time.Now().Add(time.Hour * 24),
+		Secure:      false,
+		HTTPOnly:    true,
+		SameSite:    "",
+		SessionOnly: false,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "Success.",
+	})
 }
