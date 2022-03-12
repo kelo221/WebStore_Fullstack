@@ -66,31 +66,20 @@ func ConnectDB() {
 	}
 }
 
-func AqlToString(query string) string {
-
-	var result string
+func AqlNoReturn(query string) {
 
 	ctx := context.Background()
 	cursor, err := db.Query(ctx, query, nil)
 	if err != nil {
-		fmt.Println(err, " query error")
+		fmt.Println(err)
 	}
 	defer func(cursor driver.Cursor) {
-		err = cursor.Close()
-		if err != nil {
-			fmt.Println(err, " query error")
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
 		}
 	}(cursor)
-	for {
-		_, err := cursor.ReadDocument(ctx, &result)
-		if driver.IsNoMoreDocuments(err) {
-			break
-		} else if err != nil {
-			fmt.Println(err, " query error")
-		}
-	}
 
-	return result
 }
 
 func AqlJSON(query string) models.User {
