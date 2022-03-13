@@ -37,6 +37,8 @@ func Register(c *fiber.Ctx) error {
 
 	database.PushUser(&user)
 
+	//fmt.Printf("%+v\n", user)
+
 	return c.JSON(fiber.Map{"message": "hello"})
 }
 
@@ -50,7 +52,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	dbQuery := fmt.Sprintf("FOR r IN Users FILTER r.Email == \"%s\" RETURN r", data["email"])
-	user := database.AqlJSON(dbQuery)
+	user := database.AqlReturnUser(dbQuery)
 
 	if user.Email == "" {
 		c.Status(fiber.StatusBadRequest)
@@ -112,10 +114,7 @@ func User(c *fiber.Ctx) error {
 	id, _ := middlewares.GetUserID(c)
 
 	dbQuery := fmt.Sprintf("FOR r IN Users FILTER r._id == \"%s\" RETURN r", id)
-	user := database.AqlJSON(dbQuery)
-
-	//Do not send hashed password back
-	user.Password = nil
+	user := database.AqlReturnUser(dbQuery)
 
 	return c.JSON(user)
 
@@ -200,10 +199,7 @@ func UpdatePassword(c *fiber.Ctx) error {
 		fmt.Println(err)
 	}
 
-	//	println(newUser)
-
 	dbQuery := fmt.Sprintf("UPDATE DOCUMENT(\"%s\") WITH %s IN Users", id, newUser)
-	//	println(dbQuery)
 	database.AqlNoReturn(dbQuery)
 
 	return c.JSON(fiber.Map{

@@ -12,6 +12,7 @@ import (
 
 var db driver.Database
 var userCol driver.Collection
+var productsCol driver.Collection
 
 func ConnectDB() {
 
@@ -64,6 +65,18 @@ func ConnectDB() {
 			fmt.Println(err)
 		}
 	}
+
+	// Create a collection for products
+	productsCol, err = db.Collection(nil, "Products")
+	if err != nil {
+		fmt.Println(err, "creating new...")
+		ctx := context.Background()
+		options := &driver.CreateCollectionOptions{ /* ... */ }
+		productsCol, err = db.CreateCollection(ctx, "Products", options)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }
 
 func AqlNoReturn(query string) {
@@ -82,7 +95,75 @@ func AqlNoReturn(query string) {
 
 }
 
-func AqlJSON(query string) models.User {
+func AqlReturnProducts(query string) []models.Product {
+
+	var dataPayload []models.Product
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.Product
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload
+	}
+
+	return []models.Product{}
+
+}
+
+func AqlReturnProduct(query string) models.Product {
+
+	var dataPayload []models.Product
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.Product
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload[0]
+	}
+
+	return models.Product{}
+
+}
+
+func AqlReturnUsers(query string) []models.User {
 
 	var dataPayload []models.User
 
@@ -105,6 +186,43 @@ func AqlJSON(query string) models.User {
 		} else if err2 != nil {
 			fmt.Println(err2)
 		}
+		//Do not send hashed password back, less query spaghetti compared to manually setting the query to contain the object
+		doc.Password = nil
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload
+	}
+
+	return []models.User{}
+
+}
+
+func AqlReturnUser(query string) models.User {
+
+	var dataPayload []models.User
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.User
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		doc.Password = nil
 		dataPayload = append(dataPayload, doc)
 	}
 
@@ -119,6 +237,16 @@ func AqlJSON(query string) models.User {
 func PushUser(users *models.User) {
 
 	_, err := userCol.CreateDocument(nil, users)
+
+	if err != nil {
+		log.Fatalf("Failed to create documents: %v", err)
+	}
+
+}
+
+func PushProduct(product *models.Product) {
+
+	_, err := productsCol.CreateDocument(nil, product)
 
 	if err != nil {
 		log.Fatalf("Failed to create documents: %v", err)
