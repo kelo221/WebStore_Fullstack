@@ -11,8 +11,27 @@ import (
 )
 
 var db driver.Database
+
 var userCol driver.Collection
 var productsCol driver.Collection
+
+var orders driver.Collection
+
+func generateCollection(name string) (collection driver.Collection, err error) {
+
+	collection, err = db.Collection(nil, name)
+	if err != nil {
+		fmt.Println(err, "creating new...")
+		ctx := context.Background()
+		options := &driver.CreateCollectionOptions{ /* ... */ }
+		userCol, err = db.CreateCollection(ctx, name, options)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	return
+}
 
 func ConnectDB() {
 
@@ -54,29 +73,10 @@ func ConnectDB() {
 		}
 	}
 
-	// Create a collection for users
-	userCol, err = db.Collection(nil, "Users")
-	if err != nil {
-		fmt.Println(err, "creating new...")
-		ctx := context.Background()
-		options := &driver.CreateCollectionOptions{ /* ... */ }
-		userCol, err = db.CreateCollection(ctx, "Users", options)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
+	userCol, _ = generateCollection("Users")
+	productsCol, _ = generateCollection("Products")
+	orders, _ = generateCollection("Orders")
 
-	// Create a collection for products
-	productsCol, err = db.Collection(nil, "Products")
-	if err != nil {
-		fmt.Println(err, "creating new...")
-		ctx := context.Background()
-		options := &driver.CreateCollectionOptions{ /* ... */ }
-		productsCol, err = db.CreateCollection(ctx, "Products", options)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
 }
 
 func AqlNoReturn(query string) {
@@ -163,6 +163,40 @@ func AqlReturnProduct(query string) models.Product {
 
 }
 
+func AqlReturnOrders(query string) []models.ShoppingCart {
+
+	var dataPayload []models.ShoppingCart
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.ShoppingCart
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload
+	}
+
+	return []models.ShoppingCart{}
+
+}
+
 func AqlReturnUsers(query string) []models.User {
 
 	var dataPayload []models.User
@@ -222,7 +256,6 @@ func AqlReturnUser(query string) models.User {
 		} else if err2 != nil {
 			fmt.Println(err2)
 		}
-		doc.Password = nil
 		dataPayload = append(dataPayload, doc)
 	}
 
@@ -247,6 +280,16 @@ func PushUser(users *models.User) {
 func PushProduct(product *models.Product) {
 
 	_, err := productsCol.CreateDocument(nil, product)
+
+	if err != nil {
+		log.Fatalf("Failed to create documents: %v", err)
+	}
+
+}
+
+func PushShoppingList(list *models.ShoppingCart) {
+
+	_, err := orders.CreateDocument(nil, list)
 
 	if err != nil {
 		log.Fatalf("Failed to create documents: %v", err)

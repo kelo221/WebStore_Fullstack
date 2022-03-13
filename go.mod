@@ -12,6 +12,8 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/arangodb/go-velocypack v0.0.0-20200318135517-5af53c29c67e // indirect
+	github.com/brianvoe/gofakeit/v6 v6.15.0 // indirect
+	github.com/bxcodec/faker/v3 v3.8.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/klauspost/compress v1.14.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

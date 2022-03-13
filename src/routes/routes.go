@@ -15,6 +15,7 @@ func Setup(app *fiber.App) {
 	admin.Post("login", controllers.Login)
 
 	adminAuth := admin.Use(middlewares.IsAuth)
+
 	adminAuth.Get("user", controllers.User)
 	adminAuth.Post("logout", controllers.LogOut)
 	adminAuth.Put("user/info", controllers.UpdateInfo)
@@ -23,10 +24,9 @@ func Setup(app *fiber.App) {
 
 	adminAuth.Get("products", controllers.Products)
 	adminAuth.Get("products/:id", controllers.Product)
-
 	adminAuth.Post("products", controllers.CreateProducts)
 	adminAuth.Post("products/:id", controllers.UpdateProduct)
-
 	adminAuth.Delete("products/:id", controllers.DeleteProduct)
 
+	adminAuth.Get("orders", controllers.Orders)
 }

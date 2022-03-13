@@ -116,6 +116,8 @@ func User(c *fiber.Ctx) error {
 	dbQuery := fmt.Sprintf("FOR r IN Users FILTER r._id == \"%s\" RETURN r", id)
 	user := database.AqlReturnUser(dbQuery)
 
+	user.Password = nil
+
 	return c.JSON(user)
 
 }
