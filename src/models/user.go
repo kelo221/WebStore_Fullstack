@@ -4,6 +4,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserType int64
+
+const (
+	Regular UserType = iota
+	Admin
+)
+
 type User struct {
 	FirstName string `json:"FirstName,omitempty"`
 	LastName  string `json:"LastName,omitempty"`

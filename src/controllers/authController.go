@@ -6,7 +6,6 @@ import (
 	"ambassor/src/models"
 	"encoding/json"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"time"
 )
@@ -69,17 +68,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	payload := jwt.StandardClaims{
-		Audience:  "",
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-		Id:        "",
-		IssuedAt:  0,
-		Issuer:    "",
-		NotBefore: 0,
-		Subject:   user.Id,
-	}
-
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte("secret"))
+	token, err := middlewares.GenerateJWT(user.Id, models.Admin)
 
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)

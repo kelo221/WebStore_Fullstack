@@ -7,9 +7,15 @@ import (
 )
 
 func Orders(c *fiber.Ctx) error {
+
 	var orders []models.ShoppingCart
 
 	orders = database.AqlReturnOrders("FOR r in Orders RETURN r")
+
+	for i, orderObject := range orders {
+		orders[i].Name = orderObject.FullName()
+		orders[i].Total = orderObject.CalculateTotal()
+	}
 
 	return c.JSON(orders)
 }
