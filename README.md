@@ -17,7 +17,7 @@
 | Function    | Methoid | Route       | Description       |
 | ----------- | ----------- | ----------- | ----------- |
 | Products          | GET       | /api/admin/products/       | Returns all products.       |
-| Product (ID)      | GET        | /api/admin/products/:id/       | Returns a specific product.       |
+| Product     | GET        | /api/admin/products/:id/       | Returns a specific product.       |
 | Create Products   | POST        | /api/admin/products/       | Creates a new product.       |
 | Delete Products   | DELETE        | /api/admin/products/:id      | Deletes a product.       |
 | Update Products   | POST        | /api/admin/products/:id      | Updates a product.       |
@@ -27,6 +27,6 @@
 
 | Function    | Methoid | Route       | Description       |
 | ----------- | ----------- | ----------- | ----------- |
-| Orderst          | GET       | /api/admin/orders/       | Returns all orders.       |
+| Orders          | GET       | /api/admin/orders/       | Returns all orders.       |
 
 See /src/commands/ for populating the database.
