@@ -29,3 +29,4 @@
 | ----------- | ----------- | ----------- | ----------- |
 | Orderst          | GET       | /api/admin/orders/       | Returns all orders.       |
 
+See /src/commands/ for populating the database.
