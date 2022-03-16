@@ -1,4 +1,4 @@
-FROM golang:1.18-rc
+FROM golang:latest
 
 WORKDIR /app
 COPY go.mod .

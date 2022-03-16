@@ -24,7 +24,7 @@ func generateCollection(name string) (collection driver.Collection, err error) {
 		fmt.Println(err, "creating new...")
 		ctx := context.Background()
 		options := &driver.CreateCollectionOptions{ /* ... */ }
-		userCol, err = db.CreateCollection(ctx, name, options)
+		collection, err = db.CreateCollection(ctx, name, options)
 		if err != nil {
 			fmt.Println(err)
 		}

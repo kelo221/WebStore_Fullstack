@@ -30,17 +30,17 @@ func main() {
 		}
 
 		orderComplete := models.ShoppingCart{
-			UserId:    strconv.Itoa((rand.Intn(10)) + 1),
-			Code:      gofakeit.Username(),
-			FirstName: gofakeit.Name(),
-			LastName:  gofakeit.LastName(),
-			Email:     gofakeit.Email(),
-			Address:   gofakeit.Address().Street,
-			City:      gofakeit.City(),
-			Country:   gofakeit.Country(),
-			Zip:       gofakeit.Zip(),
-			Complete:  true,
-			OrderItem: products,
+			UserId:     strconv.Itoa((rand.Intn(10)) + 1),
+			Code:       gofakeit.Username(),
+			FirstName:  gofakeit.Name(),
+			LastName:   gofakeit.LastName(),
+			Email:      gofakeit.Email(),
+			Address:    gofakeit.Address().Street,
+			City:       gofakeit.City(),
+			Country:    gofakeit.Country(),
+			Zip:        gofakeit.Zip(),
+			Complete:   true,
+			OrderItems: products,
 		}
 
 		fmt.Printf("%v", orderComplete)

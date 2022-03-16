@@ -1,9 +1,9 @@
-version: "4.5.1"
+version: '3.8'
 services:
   backend:
     build: .
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
       - .:/app
     depends_on:
@@ -13,10 +13,10 @@ services:
     image: arangodb
     volumes:
       - ./db:/data/
-    restart: always:latest
+    restart: always
     environment:
       ArangoDatabase: storefront
       ArangoUser: root
       ARANGO_ROOT_PASSWORD: root
     ports:
-        - 8530:8529
+        - "8530:8529"
