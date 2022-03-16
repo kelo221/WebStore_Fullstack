@@ -42,14 +42,14 @@ func ConnectDB() {
 	flag.Parse()
 
 	conn, err = http.NewConnection(http.ConnectionConfig{
-		Endpoints: []string{"http://db:8529"},
+		Endpoints: []string{"http://localhost:8529"},
 	})
 	if err != nil {
 		log.Fatalf("Failed to create HTTP connection: %v", err)
 	}
 	client, err = driver.NewClient(driver.ClientConfig{
 		Connection:     conn,
-		Authentication: driver.BasicAuthentication("root", "root"),
+		Authentication: driver.BasicAuthentication("root", "1234"),
 	})
 
 	var dbExists, _ bool
@@ -95,9 +95,9 @@ func AqlNoReturn(query string) {
 
 }
 
-func AqlReturnProducts(query string) []models.Product {
+func ReturnArrayOfObject[T any](query string, typeOf []T) (result []T) {
 
-	var dataPayload []models.Product
+	var dataPayload []T
 
 	ctx := context.Background()
 	cursor, err := db.Query(ctx, query, nil)
@@ -111,7 +111,7 @@ func AqlReturnProducts(query string) []models.Product {
 		}
 	}(cursor)
 	for {
-		var doc models.Product
+		var doc T
 		_, err2 := cursor.ReadDocument(ctx, &doc)
 		if driver.IsNoMoreDocuments(err2) {
 			break
@@ -125,11 +125,109 @@ func AqlReturnProducts(query string) []models.Product {
 		return dataPayload
 	}
 
-	return []models.Product{}
+	return []T{}
 
 }
 
-func AqlReturnProduct(query string) models.Product {
+func ReturnObject[T any](query string, typeOf T) (result T) {
+
+	var dataPayload []T
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc T
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload[0]
+	}
+
+	return T{}
+
+}
+
+func AqlReturnUser(query string) models.User {
+
+	var dataPayload []models.User
+
+	ctx := context.Background()
+	cursor, err := db.Query(ctx, query, nil)
+	if err != nil {
+		// handle error
+	}
+	defer func(cursor driver.Cursor) {
+		err3 := cursor.Close()
+		if err3 != nil {
+			fmt.Println(err3)
+		}
+	}(cursor)
+	for {
+		var doc models.User
+		_, err2 := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err2) {
+			break
+		} else if err2 != nil {
+			fmt.Println(err2)
+		}
+		dataPayload = append(dataPayload, doc)
+	}
+
+	if len(dataPayload) > 0 {
+		return dataPayload[0]
+	}
+
+	return models.User{}
+
+}
+
+func PushUser(users *models.User) {
+
+	_, err := userCol.CreateDocument(nil, users)
+
+	if err != nil {
+		log.Fatalf("Failed to create documents: %v", err)
+	}
+
+}
+
+func PushProduct(product *models.Product) {
+
+	_, err := productsCol.CreateDocument(nil, product)
+
+	if err != nil {
+		log.Fatalf("Failed to create documents: %v", err)
+	}
+
+}
+
+func PushShoppingList(list *models.ShoppingCart) {
+
+	_, err := orders.CreateDocument(nil, list)
+
+	if err != nil {
+		log.Fatalf("Failed to create documents: %v", err)
+	}
+
+}
+
+/*func AqlReturnProduct(query string) models.Product {
 
 	var dataPayload []models.Product
 
@@ -231,11 +329,11 @@ func AqlReturnUsers(query string) []models.User {
 
 	return []models.User{}
 
-}
+}*/
 
-func AqlReturnUser(query string) models.User {
+/*func AqlReturnProducts(query string) []models.Product {
 
-	var dataPayload []models.User
+	var dataPayload []models.Product
 
 	ctx := context.Background()
 	cursor, err := db.Query(ctx, query, nil)
@@ -249,7 +347,7 @@ func AqlReturnUser(query string) models.User {
 		}
 	}(cursor)
 	for {
-		var doc models.User
+		var doc models.Product
 		_, err2 := cursor.ReadDocument(ctx, &doc)
 		if driver.IsNoMoreDocuments(err2) {
 			break
@@ -260,39 +358,9 @@ func AqlReturnUser(query string) models.User {
 	}
 
 	if len(dataPayload) > 0 {
-		return dataPayload[0]
+		return dataPayload
 	}
 
-	return models.User{}
+	return []models.Product{}
 
-}
-
-func PushUser(users *models.User) {
-
-	_, err := userCol.CreateDocument(nil, users)
-
-	if err != nil {
-		log.Fatalf("Failed to create documents: %v", err)
-	}
-
-}
-
-func PushProduct(product *models.Product) {
-
-	_, err := productsCol.CreateDocument(nil, product)
-
-	if err != nil {
-		log.Fatalf("Failed to create documents: %v", err)
-	}
-
-}
-
-func PushShoppingList(list *models.ShoppingCart) {
-
-	_, err := orders.CreateDocument(nil, list)
-
-	if err != nil {
-		log.Fatalf("Failed to create documents: %v", err)
-	}
-
-}
+}*/

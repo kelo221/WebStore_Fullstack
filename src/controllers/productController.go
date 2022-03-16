@@ -10,7 +10,9 @@ import (
 
 func Products(c *fiber.Ctx) error {
 	var products []models.Product
-	products = database.AqlReturnProducts("FOR r in Products RETURN r")
+	//Added generics, keeping this incase something breaks
+	//products = database.AqlReturnProducts("FOR r in Products RETURN r")
+	products = database.ReturnArrayOfObject("FOR r in Products RETURN r", products)
 
 	return c.JSON(products)
 }
@@ -22,7 +24,8 @@ func Product(c *fiber.Ctx) error {
 
 	dbQuery := fmt.Sprintf("FOR r IN Products FILTER r._key == \"%s\" RETURN r", id)
 	println(dbQuery)
-	product = database.AqlReturnProduct(dbQuery)
+	//product = database.AqlReturnProduct(dbQuery)
+	product = database.ReturnObject(dbQuery, product)
 
 	return c.JSON(product)
 }
