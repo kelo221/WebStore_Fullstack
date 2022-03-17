@@ -1,9 +1,9 @@
 package main
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/models"
 	"github.com/brianvoe/gofakeit/v6"
+	"webstore/src/database"
+	"webstore/src/models"
 )
 
 // docker-compose exec backend sh

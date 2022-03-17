@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/models"
 	"github.com/gofiber/fiber/v2"
+	"webstore/src/database"
+	"webstore/src/models"
 )
 
 func Admins(c *fiber.Ctx) error {

@@ -1,12 +1,12 @@
 package main
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/models"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 	"math/rand"
 	"strconv"
+	"webstore/src/database"
+	"webstore/src/models"
 )
 
 // docker-compose exec backend sh

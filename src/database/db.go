@@ -1,13 +1,13 @@
 package database
 
 import (
-	"ambassor/src/models"
 	"context"
 	"flag"
 	"fmt"
 	"github.com/arangodb/go-driver"
 	"github.com/arangodb/go-driver/http"
 	"log"
+	"webstore/src/models"
 )
 
 var db driver.Database
@@ -159,7 +159,9 @@ func ReturnObject[T any](query string, typeOf T) (result T) {
 		return dataPayload[0]
 	}
 
-	return T{}
+	var empty T
+
+	return empty
 
 }
 

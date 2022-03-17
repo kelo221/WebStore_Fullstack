@@ -1,10 +1,10 @@
 package middlewares
 
 import (
-	"ambassor/src/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"time"
+	"webstore/src/models"
 )
 
 const SecretKey = "secret"

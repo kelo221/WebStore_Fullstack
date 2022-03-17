@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/middlewares"
-	"ambassor/src/models"
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"strings"
 	"time"
+	"webstore/src/database"
+	"webstore/src/middlewares"
+	"webstore/src/models"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -29,7 +30,7 @@ func Register(c *fiber.Ctx) error {
 		FirstName: data["first_name"],
 		LastName:  data["last_name"],
 		Email:     data["email"],
-		IsAdmin:   false,
+		IsAdmin:   !strings.Contains(c.Path(), "api/user"),
 	}
 
 	user.SetPassword(data["password"])
@@ -68,7 +69,15 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := middlewares.GenerateJWT(user.Id, models.Admin)
+	var privilege models.UserType
+
+	if strings.Contains(c.Path(), "api/user") {
+		privilege = models.Regular
+	} else {
+		privilege = models.Admin
+	}
+
+	token, err := middlewares.GenerateJWT(user.Id, privilege)
 
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)

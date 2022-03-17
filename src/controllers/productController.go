@@ -1,11 +1,13 @@
 package controllers
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/models"
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"time"
+	"webstore/src/database"
+	"webstore/src/models"
 )
 
 func Products(c *fiber.Ctx) error {
@@ -75,4 +77,35 @@ func DeleteProduct(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Product deleted.",
 	})
+}
+
+func ProductsFrontend(c *fiber.Ctx) error {
+
+	var products []models.Product
+	var ctx = context.Background()
+
+	result, _ := database.Cache.Get(ctx, "productsFrontend").Result()
+
+	if result == "" {
+		fmt.Println("cache not found")
+
+		products = database.ReturnArrayOfObject("FOR r in Products RETURN r", products)
+
+		bytes, err := json.Marshal(products)
+
+		if err != nil {
+			panic(err)
+		}
+
+		err2 := database.Cache.Set(ctx, "productsFrontend", bytes, time.Minute*30).Err()
+		if err2 != nil {
+			panic(err2)
+		}
+	} else {
+		fmt.Println("found cache")
+		json.Unmarshal([]byte(result), &products)
+	}
+
+	return c.JSON(products)
+
 }

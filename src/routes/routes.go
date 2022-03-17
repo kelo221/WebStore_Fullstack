@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"ambassor/src/controllers"
-	"ambassor/src/middlewares"
 	"github.com/gofiber/fiber/v2"
+	"webstore/src/controllers"
+	"webstore/src/middlewares"
 )
 
 func Setup(app *fiber.App) {
@@ -27,6 +27,20 @@ func Setup(app *fiber.App) {
 	adminAuth.Post("products", controllers.CreateProducts)
 	adminAuth.Post("products/:id", controllers.UpdateProduct)
 	adminAuth.Delete("products/:id", controllers.DeleteProduct)
-
 	adminAuth.Get("orders", controllers.Orders)
+
+	userRoute := api.Group("user")
+	userRoute.Post("register", controllers.Register)
+	userRoute.Post("login", controllers.Login)
+
+	userRouteAuth := userRoute.Use(middlewares.IsAuth)
+	userRouteAuth.Get("user", controllers.User)
+	userRouteAuth.Post("logout", controllers.LogOut)
+	userRouteAuth.Put("user/info", controllers.UpdateInfo)
+	userRouteAuth.Put("user/password", controllers.UpdatePassword)
+
+	userRouteAuth.Get("products/frontend", controllers.ProductsFrontend)
+
+	//TODO personal orders tied to user id, maybe
+
 }

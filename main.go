@@ -1,15 +1,16 @@
 package main
 
 import (
-	"ambassor/src/database"
-	"ambassor/src/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"webstore/src/database"
+	"webstore/src/routes"
 )
 
 func main() {
 
 	database.ConnectDB()
+	database.SetupRedis()
 
 	app := fiber.New()
 
