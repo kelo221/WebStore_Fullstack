@@ -16,7 +16,7 @@ func Setup(app *fiber.App) {
 
 	adminAuth := admin.Use(middlewares.IsAuth)
 
-	adminAuth.Get("user", controllers.User)
+	adminAuth.Get("", controllers.User)
 	adminAuth.Post("logout", controllers.LogOut)
 	adminAuth.Put("user/info", controllers.UpdateInfo)
 	adminAuth.Put("user/password", controllers.UpdatePassword)
@@ -34,7 +34,7 @@ func Setup(app *fiber.App) {
 	userRoute.Post("login", controllers.Login)
 
 	userRouteAuth := userRoute.Use(middlewares.IsAuth)
-	userRouteAuth.Get("user", controllers.User)
+	userRouteAuth.Get("", controllers.User)
 	userRouteAuth.Post("logout", controllers.LogOut)
 	userRouteAuth.Put("user/info", controllers.UpdateInfo)
 	userRouteAuth.Put("user/password", controllers.UpdatePassword)
