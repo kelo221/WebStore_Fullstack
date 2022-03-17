@@ -9,8 +9,8 @@
 | Register    | POST     | /api/X/register/       |-|"first_name","last_name","email","password","password_confirm"|
 | Log In      | POST        | /api/X/login/       |-|"email","password"|
 | Log Out     | POST       | /api/X/logout/         |-|-|
-| User Information| GET    | /api/X/user/       | Returns current user information|-|
-| Change Password | PUT    | /api/X/user/password       |-|"password","password_confirm"|
+| User Information| GET    | /api/X/       | Returns current user information|-|
+| Change Password | PUT    | /api/X/password       |-|"password","password_confirm"|
 
 ### Products
 
