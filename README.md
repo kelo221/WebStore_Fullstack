@@ -4,13 +4,13 @@
 
 ### User
 
-| Function    | Methoid | Route       | Description       |
-| ----------- | ----------- | ----------- | ----------- |
-| Register    | POST     | /api/admin/register/       |-|
-| Log In      | POST        | /api/admin/login/       |-|
-| Log Out     | POST       | /api/admin/logout/         |-|
-| User Information| GET    | /api/admin/user/       | Returns current user information|
-| Change Password | PUT    | /api/admin/user/password       |-|
+| Function    | Methoid | Route       | Description        | Parametres (JSON)      |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| Register    | POST     | /api/admin/register/       |-|"first_name","last_name","email","password","password_confirm"|
+| Log In      | POST        | /api/admin/login/       |-|"email","password"|
+| Log Out     | POST       | /api/admin/logout/         |-|-|
+| User Information| GET    | /api/admin/user/       | Returns current user information|-|
+| Change Password | PUT    | /api/admin/user/password       |-|"password","password_confirm"|
 
 ### Products
 
