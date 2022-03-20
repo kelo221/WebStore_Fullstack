@@ -19,6 +19,13 @@ func Register(c *fiber.Ctx) error {
 		return err
 	}
 
+	if data["email"] == "" || data["password"] == "" {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "missing email or password",
+		})
+	}
+
 	if data["password"] != data["password_confirm"] {
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -30,6 +37,7 @@ func Register(c *fiber.Ctx) error {
 		FirstName: data["first_name"],
 		LastName:  data["last_name"],
 		Email:     data["email"],
+		Avatar:    "/img/users/noImage.jpg",
 		IsAdmin:   !strings.Contains(c.Path(), "api/user"),
 	}
 
@@ -45,6 +53,8 @@ func Register(c *fiber.Ctx) error {
 func Login(c *fiber.Ctx) error {
 
 	var data map[string]string
+
+	//	fmt.Printf("%s", c.Context().PostBody())
 
 	if err := c.BodyParser(&data); err != nil {
 		println("parsing error")
@@ -113,7 +123,6 @@ func User(c *fiber.Ctx) error {
 
 	dbQuery := fmt.Sprintf("FOR r IN Users FILTER r._id == \"%s\" RETURN r", id)
 	user := database.AqlReturnUser(dbQuery)
-
 	user.Password = nil
 
 	return c.JSON(user)

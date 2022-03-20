@@ -18,6 +18,7 @@ type User struct {
 	Password  []byte `json:"Password,omitempty"`
 	IsAdmin   bool   `json:"IsAdmin"`
 	Id        string `json:"_Id,omitempty"`
+	Avatar    string `json:"Avatar,omitempty"`
 }
 
 func (user *User) SetPassword(password string) {

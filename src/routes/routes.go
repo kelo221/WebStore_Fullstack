@@ -11,10 +11,11 @@ func Setup(app *fiber.App) {
 	api := app.Group("api")
 
 	admin := api.Group("admin")
-	admin.Post("register", controllers.Register)
+
+	//admin.Post("register", controllers.Register)
 	admin.Post("login", controllers.Login)
 
-	adminAuth := admin.Use(middlewares.IsAuth)
+	adminAuth := admin.Use(middlewares.IsAuthAdmin)
 
 	adminAuth.Get("", controllers.User)
 	adminAuth.Post("logout", controllers.LogOut)
@@ -24,9 +25,11 @@ func Setup(app *fiber.App) {
 
 	adminAuth.Get("products", controllers.Products)
 	adminAuth.Get("products/:id", controllers.Product)
+
 	adminAuth.Post("products", controllers.CreateProducts)
-	adminAuth.Post("products/:id", controllers.UpdateProduct)
+	adminAuth.Put("products/:id", controllers.UpdateProduct)
 	adminAuth.Delete("products/:id", controllers.DeleteProduct)
+
 	adminAuth.Get("orders", controllers.Orders)
 
 	userRoute := api.Group("user")
@@ -34,13 +37,17 @@ func Setup(app *fiber.App) {
 	userRoute.Post("login", controllers.Login)
 
 	userRouteAuth := userRoute.Use(middlewares.IsAuth)
-	userRouteAuth.Get("", controllers.User)
+	userRouteAuth.Get("info", controllers.User)
 	userRouteAuth.Post("logout", controllers.LogOut)
 	userRouteAuth.Put("info", controllers.UpdateInfo)
 	userRouteAuth.Put("password", controllers.UpdatePassword)
 
-	userRouteAuth.Get("products/frontend", controllers.ProductsFrontend)
+	api.Get("products/frontend", controllers.ProductsFrontend)
+	api.Get("products/backend", controllers.ProductsBackend)
 
 	//TODO personal orders tied to user id, maybe
+
+	checkOut := api.Group("checkout")
+	checkOut.Post("orders", controllers.CreateOrder)
 
 }

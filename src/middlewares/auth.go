@@ -14,7 +14,7 @@ type ClaimsWithScope struct {
 	Scope models.UserType
 }
 
-func IsAuth(c *fiber.Ctx) error {
+func IsAuthAdmin(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
 
 	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {
@@ -33,7 +33,24 @@ func IsAuth(c *fiber.Ctx) error {
 	if payload.Scope != models.Admin {
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
-			"message": "unauthorized",
+			"message": "Not an Admin.",
+		})
+	}
+
+	return c.Next()
+}
+
+func IsAuth(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(SecretKey), nil
+	})
+
+	if err != nil || !token.Valid {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "not logged in",
 		})
 	}
 

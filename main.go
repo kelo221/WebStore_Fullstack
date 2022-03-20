@@ -11,8 +11,11 @@ func main() {
 
 	database.ConnectDB()
 	database.SetupRedis()
+	database.SetupCacheChannel()
 
 	app := fiber.New()
+
+	app.Static("/", "./public")
 
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,

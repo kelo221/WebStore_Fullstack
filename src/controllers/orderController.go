@@ -19,3 +19,50 @@ func Orders(c *fiber.Ctx) error {
 
 	return c.JSON(orders)
 }
+
+type CreateOrderRequest struct {
+	Code string `json:"Code"`
+
+	FirstName string `json:"FirstName"`
+	LastName  string `json:"LastName"`
+	Email     string `json:"Email"`
+	Name      string `json:"Name,omitempty"`
+
+	Address string `json:"Address"`
+	City    string `json:"City"`
+	Country string `json:"Country"`
+	Zip     string `json:"Zip"`
+
+	Total    float64          `json:"Total,omitempty"`
+	Products []map[string]int `json:"Products"`
+}
+
+func CreateOrder(c *fiber.Ctx) error {
+
+	/*	var request = CreateOrderRequest
+
+		err := c.BodyParser(&request)
+		if err != nil {
+			return err
+		}
+
+		order := models.ShoppingCart{
+			Id:            "",
+			TransactionId: "",
+			UserId:        "",
+			Code:          "",
+			FirstName:     request.FirstName,
+			LastName:      request.LastName,
+			Email:         request.Email,
+			Name:          request.Name,
+			Address:       request.Address,
+			City:          request.City,
+			Country:       request.Country,
+			Zip:           request.Zip,
+			Complete:      false,
+			Total:         0,
+			OrderItems:    nil,
+		}
+	*/
+	return c.JSON("product")
+}
