@@ -23,3 +23,5 @@ node_modules
 .sass-cache
 
 tmp/
+
+public/static

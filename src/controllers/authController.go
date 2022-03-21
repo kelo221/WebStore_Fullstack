@@ -97,18 +97,12 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:        "jwt",
-		Value:       token,
-		Path:        "",
-		Domain:      "",
-		MaxAge:      0,
-		Expires:     time.Now().Add(time.Hour * 24),
-		Secure:      false,
-		HTTPOnly:    true,
-		SameSite:    "",
-		SessionOnly: false,
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+		SameSite: "None",
 	}
-
 	c.Cookie(&cookie)
 
 	return c.JSON(fiber.Map{
@@ -132,16 +126,11 @@ func User(c *fiber.Ctx) error {
 func LogOut(c *fiber.Ctx) error {
 
 	cookie := fiber.Cookie{
-		Name:        "jwt",
-		Value:       "",
-		Path:        "",
-		Domain:      "",
-		MaxAge:      0,
-		Expires:     time.Now().Add(-time.Hour),
-		Secure:      false,
-		HTTPOnly:    true,
-		SameSite:    "",
-		SessionOnly: false,
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+		SameSite: "None",
 	}
 
 	c.Cookie(&cookie)
