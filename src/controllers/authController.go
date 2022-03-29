@@ -22,14 +22,14 @@ func Register(c *fiber.Ctx) error {
 	if data["email"] == "" || data["password"] == "" {
 		c.Status(400)
 		return c.JSON(fiber.Map{
-			"message": "missing email or password",
+			"message": "Missing email or password!",
 		})
 	}
 
 	if data["password"] != data["password_confirm"] {
 		c.Status(400)
 		return c.JSON(fiber.Map{
-			"message": "passwords do not match",
+			"message": "Passwords do not match!",
 		})
 	}
 
@@ -47,7 +47,7 @@ func Register(c *fiber.Ctx) error {
 
 	//fmt.Printf("%+v\n", user)
 
-	return c.JSON(fiber.Map{"message": "hello"})
+	return c.JSON(fiber.Map{"message": "Registered!"})
 }
 
 func Login(c *fiber.Ctx) error {
