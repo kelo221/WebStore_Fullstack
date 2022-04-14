@@ -33,7 +33,12 @@ func main() {
 		}
 
 		if !info.IsDir() && filepath.Ext(path) == ".png" {
-			fruits = append(fruits, strings.TrimLeft(strings.TrimSuffix(path, filepath.Ext(path)), "public\\img\\products\\"))
+			fruitString := strings.ReplaceAll(path, "public\\img\\products\\", "")
+			fruitString = fruitString[:len(fruitString)-4]
+			fmt.Println(path)
+			println(fruitString)
+
+			fruits = append(fruits, fruitString)
 
 		}
 
