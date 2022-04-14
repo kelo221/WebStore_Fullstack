@@ -9,6 +9,10 @@ import (
 	"webstore/src/routes"
 )
 
+///		TODO
+/// 	1.	Check if email already exists
+///		2.	Connect user orders
+
 func main() {
 
 	database.ConnectDB()
@@ -21,9 +25,8 @@ func main() {
 
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-		AllowOrigins: "http://127.0.0.1:8000,  http://localhost:8000,  http://localhost:3000," +
-			"https://127.0.0.1:8000,  https://localhost:8000,  https://localhost:3000,",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowOrigins:     "https://127.0.0.1:8000,  https://localhost:8000,  https://localhost:3000, https://127.0.0.1:8000,  https://localhost:8000,  http://localhost:3001,",
+		AllowHeaders:     "Origin, Content-Type, Accept",
 	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -33,7 +36,7 @@ func main() {
 	routes.Setup(app)
 
 	// Create tls certificate
-	cer, err := tls.LoadX509KeyPair("certs/cert.pem", "certs/key.pem")
+	cer, err := tls.LoadX509KeyPair("certs/ssl.cert", "certs/ssl.key")
 	if err != nil {
 		log.Fatal(err)
 	}
