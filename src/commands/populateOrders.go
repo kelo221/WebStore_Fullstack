@@ -31,7 +31,6 @@ func main() {
 
 		orderComplete := models.ShoppingCart{
 			UserId:     strconv.Itoa((rand.Intn(10)) + 1),
-			Code:       gofakeit.Username(),
 			FirstName:  gofakeit.Name(),
 			LastName:   gofakeit.LastName(),
 			Email:      gofakeit.Email(),

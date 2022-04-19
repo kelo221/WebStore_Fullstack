@@ -45,16 +45,12 @@ func Register(c *fiber.Ctx) error {
 
 	database.PushUser(&user)
 
-	//fmt.Printf("%+v\n", user)
-
 	return c.JSON(fiber.Map{"message": "Registered!"})
 }
 
 func Login(c *fiber.Ctx) error {
 
 	var data map[string]string
-
-	//	fmt.Printf("%s", c.Context().PostBody())
 
 	if err := c.BodyParser(&data); err != nil {
 		println("parsing error")

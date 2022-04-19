@@ -42,12 +42,12 @@ func Setup(app *fiber.App) {
 	userRouteAuth.Put("info", controllers.UpdateInfo)
 	userRouteAuth.Put("password", controllers.UpdatePassword)
 
+	userRouteAuth.Get("orders", controllers.OrdersLimited)
+
 	api.Get("products/frontend", controllers.ProductsFrontend)
 	api.Get("products/backend", controllers.ProductsBackend)
 
-	//TODO personal orders tied to user id, maybe
-
 	checkOut := api.Group("checkout")
-	checkOut.Post("orders", controllers.CreateOrder)
+	checkOut.Put("orders", controllers.CreateOrder)
 
 }

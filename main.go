@@ -33,6 +33,8 @@ func main() {
 		return c.SendString("Hello, World 👋!")
 	})
 
+	//go database.ClearCache("productsFrontend", "productsBackend")
+
 	err := app.Listen(":8000")
 	if err != nil {
 		return

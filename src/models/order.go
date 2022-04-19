@@ -5,7 +5,6 @@ type ShoppingCart struct {
 	Id            string `json:"_Id,omitempty"`
 	TransactionId string `json:"TransactionId"`
 	UserId        string `json:"UserId"`
-	Code          string `json:"Code"`
 
 	FirstName string `json:"FirstName"`
 	LastName  string `json:"LastName"`
@@ -25,7 +24,7 @@ type ShoppingCart struct {
 // OrderItem A singular object that holds how many of which product has been selected.
 type OrderItem struct {
 	Id           string  `json:"_Id,omitempty"`
-	ProductTitle string  `json:"ProductTitle"`
+	ProductTitle string  `json:"Title"`
 	Price        float64 `json:"Price"`
 	Quantity     uint    `json:"Quantity"`
 }
