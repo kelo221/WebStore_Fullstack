@@ -25,11 +25,10 @@ func OrdersLimited(c *fiber.Ctx) error {
 
 	id, _ := middlewares.GetUserID(c)
 
-	var result models.ShoppingCart
+	var result []models.ShoppingCart
 
 	dbQuery := fmt.Sprintf("FOR r in Orders FILTER r.UserId == \"%s\" RETURN r", id)
-	fmt.Printf("%s \n", dbQuery)
-	user := database.ReturnObject(dbQuery, result)
+	user := database.ReturnArrayOfObject(dbQuery, result)
 
 	return c.JSON(user)
 }
