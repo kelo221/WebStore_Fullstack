@@ -1,5 +1,7 @@
 # WebStore_Fullstack
 
+Demo: http://35.178.79.226:8000/
+
 ## API
 
 ### User
