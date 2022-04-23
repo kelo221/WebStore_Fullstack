@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.95cb88cb.css","mappings":"AAAA,cACE,YAAa,CACb,qBAAsB,CACtB,6BACF,CAEA,IAEE,4BACF","sources":["App.css"],"sourcesContent":[".MuiCard-root{\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: space-between;\r\n}\r\n\r\nimg {\r\n\r\n  image-rendering: high-quality;\r\n}"],"names":[],"sourceRoot":""}

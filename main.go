@@ -29,10 +29,6 @@ func main() {
 
 	routes.Setup(app)
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
-	})
-
 	//go database.ClearCache("productsFrontend", "productsBackend")
 
 	err := app.Listen(":8000")
