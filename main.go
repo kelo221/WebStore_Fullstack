@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"webstore/src/commands"
 	"webstore/src/database"
 	"webstore/src/routes"
 )
@@ -19,8 +18,6 @@ func main() {
 	database.SetupCacheChannel()
 
 	app := fiber.New()
-
-	commands.Populate()
 
 	app.Static("/", "./public")
 

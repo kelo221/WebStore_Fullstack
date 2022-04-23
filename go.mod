@@ -1,10 +1,10 @@
 module webstore
+
 // +heroku goVersion go1.18
 go 1.18
 
-
 require (
-	github.com/arangodb/go-driver v1.2.1
+	github.com/arangodb/go-driver v1.3.1
 	github.com/brianvoe/gofakeit/v6 v6.15.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-redis/redis/v8 v8.11.5

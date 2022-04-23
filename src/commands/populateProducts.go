@@ -1,4 +1,4 @@
-package commands
+package main
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ func getRandomFruit(fruits []string) string {
 	return fruits[int(gofakeit.Price(0, float64(len(fruits))))]
 }
 
-func Populate() {
+func main() {
 
 	var fruits []string
 

@@ -41,6 +41,14 @@ func Register(c *fiber.Ctx) error {
 		IsAdmin:   !strings.Contains(c.Path(), "api/user"),
 	}
 
+	if user.Email == "user" {
+		user.Avatar = "/img/users/user.png"
+	}
+
+	if user.Email == "admin" {
+		user.Avatar = "/img/users/admin.png"
+	}
+
 	user.SetPassword(data["password"])
 
 	database.PushUser(&user)
