@@ -2,6 +2,7 @@
 
 Demo: http://35.178.79.226:8000/
 Example user: user,user
+Technologies: Fiber, Redis, ArangoDB
 
 ## API
 
